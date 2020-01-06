@@ -1,29 +1,22 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const {Client} = require('pg')
+const db = require('./server/queries')
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: true}))
 
-const client = new Client ({
-    user : "postgres",
-    password : 5432,
-    host : "localhost",
-    port : 5432,
-    database : "shop_list"
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Content-Length, X-Requested-With"
+    )
+    next();
 })
 
-client.connect()
-.then(() => console.log("connected successfuly"))
-.then(() => client.query(`select * from items`))
-.then(results => console.table(results.rows))
-.catch(e => console.log(e))
-.finally(() => client.end())
-
-
-
-
+app.use("/", db);
 
 
 const PORT = 1912
