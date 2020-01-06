@@ -1,26 +1,40 @@
 import React, { Component } from "react";
-import Axios from "axios";
 
 class List extends Component {
   constructor() {
     super();
     this.state = {
-      items: [],
-      hi: "hello world"
+      searchInput: ""
     };
   }
 
-  getDataFromDB = async () => {
-    let items = await Axios.get(`http://localhost:1912/items`);
-    this.state.items = items.data;
-    console.log(this.state.items);
-    console.log(this.state.hi);
-  };
+//   componentDidMount = async () => {
+//     await this.getDataFromDB();
+//   };
+
+//   getDataFromDB = async () => {
+//     let items = await Axios.get(`http://localhost:1912/items`);
+//     this.state.items = items.data;
+//     console.log(this.state.items);
+//   };
+
+  inputHandler = e => this.setState({ [e.target.id]: e.target.value });
+
+//   addItem = () =>{
+
+//   }
 
   render() {
     return (
       <div>
-        <div onClick={this.getDataFromDB}>{this.state.hi}</div>
+        <input type="text" id="searchInput" onChange={this.inputHandler} />
+        <button onClick = {this.addItem} >add</button>
+        {this.props.items.length?
+         this.props.items.map(i=> (
+            <li key = {i.id}>{i.item}</li>
+        )
+         ) : null
+         }
       </div>
     );
   }
